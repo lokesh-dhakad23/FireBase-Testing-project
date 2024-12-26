@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>testing</title>
+    <link rel="stylesheet" href="test.css"/>
+</head>
+<body>
+    <button id="login-btn">Login</button>
+
+    <!-- Authentication Container -->
+    <div id="auth-container">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button id="signup-btn">Sign Up</button>
+        <button id="login-btn">Login</button>
+    </div>
+
+    <!-- Note Container -->
+    <div>
+        <textarea id="textarea" placeholder="Write your note here..."></textarea>
+        <button id="save-btn">Save Note</button>
+        <button id="clear-btn">Clear Notes</button>
+    </div>
+    <div id="note-container">
+        <h3>Saved Notes</h3>
+        <div id="showInfo">
+            <!-- Notes will dynamically appear here -->
+        </div>
+    </div>
+    <!-- <button id="get-btn">get data</button> -->
+    <script type="module" src="test.js"></script>
+</body>
+</html>
