@@ -24,8 +24,62 @@ const auth = getAuth(app);
 const textarea = document.getElementById("textarea");
 const saveBtn = document.getElementById("save-btn");
 const showData = document.getElementById("showInfo");
+
+// FOR AUTHENTICATION //
+const authForm = document.getElementById("auth-container");
+const mainPage = document.getElementById("main-container");
+const loginBtn = document.getElementById("login-btn");
+const signUpBtn = document.getElementById("signup-btn");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const formLoginBtn = document.getElementById("form-login-btn");
+const closeBtn = document.getElementById("close-btn");
+const authMessage = document.getElementById("auth-message");
 // const getDataBtn = document.getElementById("get-btn");
 
+
+loginBtn.addEventListener("click", () => {
+  authForm.style.display = "flex";
+  mainPage.style.display = "none";
+})
+
+closeBtn.addEventListener("click", () => {
+  authForm.style.display = "none";
+  mainPage.style.display = "block";
+})
+
+signUpBtn.addEventListener("click", () => {
+  
+  const email = emailInput.value
+  const password = passwordInput.value
+  createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    console.log(user)
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorMessage)
+  });
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    console.log("hello")
+      authForm.style.display = 'none';
+      mainPage.style.display = 'block';
+      authMessage.textContent = `Welcome, ${user.email}!`;
+      fetchInRealtime();
+  } else {
+      // User is signed out
+      authForm.style.display = 'flex';
+      mainPage.style.display = 'none';
+      authMessage.textContent = 'Please sign in or create an account';
+      console.log("No user is signed in.")
+  }
+});
 
 
 saveBtn.addEventListener("click", () => {
@@ -36,6 +90,8 @@ saveBtn.addEventListener("click", () => {
     text = ""
     fetchInRealtime()
 });
+
+
 
 
 // getDataBtn.addEventListener("click",  async () => {
