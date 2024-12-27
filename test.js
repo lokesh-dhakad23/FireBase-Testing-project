@@ -34,9 +34,8 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const formLoginBtn = document.getElementById("form-login-btn");
 const closeBtn = document.getElementById("close-btn");
+const logOutBtn = document.getElementById("log-out-btn");
 const authMessage = document.getElementById("auth-message");
-// const getDataBtn = document.getElementById("get-btn");
-
 
 loginBtn.addEventListener("click", () => {
   authForm.style.display = "flex";
@@ -64,10 +63,41 @@ signUpBtn.addEventListener("click", () => {
   });
 });
 
+formLoginBtn.addEventListener("click", () => {
+  const email = emailInput.value
+  const password = passwordInput.value
+    signInWithEmailAndPassword(auth, email, password) 
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log("success sign-in");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage)
+    })
+});
+
+logOutBtn.addEventListener("click", () => {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      authForm.style.display = "flex";
+      mainPage.style.display = "none";
+      console.log("sign-out successful")
+
+    })
+    .catch((error) => {
+      // An error happened.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage)
+    });
+  });
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
-    console.log("hello")
+    console.log("success change")
       authForm.style.display = 'none';
       mainPage.style.display = 'block';
       authMessage.textContent = `Welcome, ${user.email}!`;
@@ -91,19 +121,6 @@ saveBtn.addEventListener("click", () => {
     fetchInRealtime()
 });
 
-
-
-
-// getDataBtn.addEventListener("click",  async () => {
-//   const querySnapshot = await getDocs(collection(db, "data"));
-
-//   showInfo.innerHTML = ""
-  
-//   querySnapshot.forEach((doc) => {
-//       console.log(`${doc.id} => ${doc.data().body}`)
-//       showDataFunc(showData,doc.data())
-//   });
-// })
 
 function fetchInRealtime() {
   onSnapshot(collection(db, "data"), (querySnapshot) => {
