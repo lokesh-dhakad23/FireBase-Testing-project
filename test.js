@@ -4,7 +4,9 @@ import { getAuth,
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword, 
         onAuthStateChanged, 
-        signOut } 
+        signOut,
+        GoogleAuthProvider,
+        signInWithPopup } 
         from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -19,6 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 
 const textarea = document.getElementById("textarea");
@@ -35,6 +38,7 @@ const passwordInput = document.getElementById("password");
 const formLoginBtn = document.getElementById("form-login-btn");
 const closeBtn = document.getElementById("close-btn");
 const logOutBtn = document.getElementById("log-out-btn");
+const signInWithGoogleBtn = document.getElementById("signup-google");
 const authMessage = document.getElementById("auth-message");
 
 loginBtn.addEventListener("click", () => {
@@ -46,6 +50,24 @@ closeBtn.addEventListener("click", () => {
   authForm.style.display = "none";
   mainPage.style.display = "block";
 })
+
+signInWithGoogleBtn.addEventListener("click", () => {
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const user = result.user;
+    console.log(user)
+    console.log("success sign-in with google")
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const email = error.email;
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    console.error(errorMessage)
+  });
+});
 
 signUpBtn.addEventListener("click", () => {
   
@@ -74,7 +96,7 @@ formLoginBtn.addEventListener("click", () => {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorMessage)
+      console.error(errorMessage)
     })
 });
 
@@ -83,6 +105,8 @@ logOutBtn.addEventListener("click", () => {
       // Sign-out successful.
       authForm.style.display = "flex";
       mainPage.style.display = "none";
+      emailInput.value = ""
+      passwordInput.value = ""
       console.log("sign-out successful")
 
     })
@@ -90,7 +114,7 @@ logOutBtn.addEventListener("click", () => {
       // An error happened.
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorMessage)
+      console.error(errorMessage)
     });
   });
 
