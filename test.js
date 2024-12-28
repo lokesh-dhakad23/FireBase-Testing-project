@@ -50,15 +50,15 @@ const logOutBtn = document.getElementById("log-out-btn");
 const signInWithGoogleBtn = document.getElementById("signup-google");
 const authMessage = document.getElementById("auth-message");
 
-loginBtn.addEventListener("click", () => {
-  authForm.style.display = "flex";
-  mainPage.style.display = "none";
-})
+// loginBtn.addEventListener("click", () => {
+//   authForm.style.display = "flex";
+//   mainPage.style.display = "none";
+// })
 
-closeBtn.addEventListener("click", () => {
-  authForm.style.display = "none";
-  mainPage.style.display = "block";
-})
+// closeBtn.addEventListener("click", () => {
+//   authForm.style.display = "none";
+//   mainPage.style.display = "block";
+// })
 
 signInWithGoogleBtn.addEventListener("click", () => {
   const provider = new GoogleAuthProvider();
@@ -132,15 +132,18 @@ onAuthStateChanged(auth, (user) => {
     // User is signed in
     userProfile(user)
     console.log("success change")
-      authForm.style.display = 'none';
-      mainPage.style.display = 'block';
+    hideEl(authForm)
+    showEl(mainPage)
       fetchInRealtime(user);
+
   } else {
       // User is signed out
       authForm.style.display = 'flex';
       mainPage.style.display = 'none';
       authMessage.textContent = 'Please sign in or create an account';
       console.log("No user is signed in.")
+      fetchInRealtime(user)
+      userProfile(user)
   }
 });
 
@@ -186,12 +189,19 @@ deleteBtn.addEventListener("click", () => userProfile(auth.currentUser));
 
 function userProfile(user) {
   const { displayName, photoURL } = user;
-  console.log(displayName, email, photoURL)
     if (displayName || photoURL) {
-
+      profilePhoto.src = photoURL;
       const userFirstName = displayName.split(" ")[0];
       authMessage.textContent = `Hello, ${userFirstName} how are you today?`;
   } else {
       authMessage.textContent = `Hey friend, how are you?`
   }
+}
+
+function hideEl(e) {
+  e.style.display = "none";
+}
+
+function showEl(e) {
+  e.style.display = "block";
 }

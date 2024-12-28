@@ -72,7 +72,7 @@ h2 {
     border-bottom: none;
 }
 
-#clear-btn,#close-btn,#log-out-btn {
+#clear-btn,#close-btn {
     padding: 10px 20px;
     font-size: 16px;
     color: white;
@@ -81,6 +81,21 @@ h2 {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+#log-out-btn {
+    position: absolute;
+    top: 20px;
+    right: 400px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #e33b49;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 0px;
     transition: background-color 0.3s ease;
 }
 
