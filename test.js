@@ -1,5 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getFirestore, addDoc, collection, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, 
+        addDoc, 
+        collection, 
+        getDocs, 
+        onSnapshot, 
+        query, 
+        where } 
+        from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 import { getAuth, 
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword, 
@@ -27,6 +34,8 @@ const provider = new GoogleAuthProvider();
 const textarea = document.getElementById("textarea");
 const saveBtn = document.getElementById("save-btn");
 const showData = document.getElementById("showInfo");
+const deleteBtn = document.getElementById("clear-btn");
+const profilePhoto = document.getElementById("profile-pic");
 
 // FOR AUTHENTICATION //
 const authForm = document.getElementById("auth-container");
@@ -121,11 +130,11 @@ logOutBtn.addEventListener("click", () => {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in
+    userProfile(user)
     console.log("success change")
       authForm.style.display = 'none';
       mainPage.style.display = 'block';
-      authMessage.textContent = `Welcome, ${user.email}!`;
-      fetchInRealtime();
+      fetchInRealtime(user);
   } else {
       // User is signed out
       authForm.style.display = 'flex';
@@ -142,20 +151,21 @@ saveBtn.addEventListener("click", () => {
         addToDB(text)
     }
     text = ""
-    fetchInRealtime()
 });
 
 
-function fetchInRealtime() {
-  onSnapshot(collection(db, "data"), (querySnapshot) => {
+function fetchInRealtime(user) {
+  const postsRef = collection(db, "data");
+  const q = query(postsRef, where("uid", "==", user.uid))
+  onSnapshot(q, (querySnapshot) => {
       showData.innerHTML = ""
       
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${doc.data().body}`)
         showDataFunc(showData,doc.data())
-      })
-  })
-}
+      });
+  });
+};
 
 function showDataFunc(showInfo,datatext) {
   showInfo.innerHTML += `<h1 id="showdata">${datatext.body}</h1>`
@@ -164,9 +174,24 @@ async function addToDB(text) {
     try {
         const docRef = await addDoc(collection(db, "data"), {
           body: text,
+          uid: auth.currentUser.uid
         });
         console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
+}
+
+deleteBtn.addEventListener("click", () => userProfile(auth.currentUser));
+
+function userProfile(user) {
+  const { displayName, photoURL } = user;
+  console.log(displayName, email, photoURL)
+    if (displayName || photoURL) {
+
+      const userFirstName = displayName.split(" ")[0];
+      authMessage.textContent = `Hello, ${userFirstName} how are you today?`;
+  } else {
+      authMessage.textContent = `Hey friend, how are you?`
+  }
 }
