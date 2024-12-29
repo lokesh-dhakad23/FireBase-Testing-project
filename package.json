@@ -1,0 +1,21 @@
+{
+  "name": "testing-project",
+  "version": "1.0.0",
+  "description": "This project is a Notes App that allows users to create, view, edit, and delete notes. It is built with a simple yet robust architecture using Firebase for data storage and real-time synchronization. The codebase is designed to be modular and easy to understand, making it straightforward to extend or customize.",
+  "main": "test.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.0.6"
+  },
+  "dependencies": {
+    "firebase": "^11.1.0"
+  },
+  "type": "module"
+}

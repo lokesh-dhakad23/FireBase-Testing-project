@@ -1,12 +1,14 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { initializeApp } from "firebase/app";
 import { getFirestore, 
         addDoc, 
         collection, 
         getDocs, 
         onSnapshot, 
         query, 
-        where } 
-        from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        where,
+        deleteDoc,
+        doc } 
+        from "firebase/firestore";
 import { getAuth, 
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword, 
@@ -14,7 +16,7 @@ import { getAuth,
         signOut,
         GoogleAuthProvider,
         signInWithPopup } 
-        from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+        from "firebase/auth"
 
 const firebaseConfig = {
     apiKey: "AIzaSyBMlC0qEs3laPw8nj1ruMixTsiO9HKBWPk",
@@ -185,7 +187,23 @@ async function addToDB(text) {
       }
 }
 
-// deleteBtn.addEventListener("click", () => ());
+deleteBtn.addEventListener("click", () => deleteAllData());
+
+async function deleteAllData() {
+    const userId = auth.currentUser.uid; // Get the current user's UID
+    const q = query(collection(db, "data"), where("uid", "==", userId)); // Query notes by user ID
+    const querySnapshot = await getDocs(q);
+
+    // Delete all notes
+    const deletePromises = querySnapshot.docs.map((docSnapshot) =>
+      deleteDoc(doc(db, "data", docSnapshot.id))
+    );
+
+    // Clear the notes display after deletion
+    showData.innerHTML = "";
+}
+
+    
 
 function userProfile(user) {
   const { displayName, photoURL } = user;
