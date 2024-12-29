@@ -152,8 +152,8 @@ saveBtn.addEventListener("click", () => {
     let text = textarea.value
     if (text) {
         addToDB(text)
+        textarea.value = ""
     }
-    text = ""
 });
 
 
@@ -185,7 +185,7 @@ async function addToDB(text) {
       }
 }
 
-deleteBtn.addEventListener("click", () => userProfile(auth.currentUser));
+// deleteBtn.addEventListener("click", () => ());
 
 function userProfile(user) {
   const { displayName, photoURL } = user;
