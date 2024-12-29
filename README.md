@@ -1,0 +1,1 @@
+This project is a Notes App that allows users to create, view, edit, and delete notes. It is built with a simple yet robust architecture using Firebase for data storage and real-time synchronization. The codebase is designed to be modular and easy to understand, making it straightforward to extend or customize.
